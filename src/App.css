@@ -1,0 +1,23 @@
+.hamburger {
+  width: 42px;
+  height: 60px;
+  float: left;
+  color: black;
+
+}
+
+.hamburgerline {
+  width: 42px !important;
+  height: 4px !important;
+  background-color: white;
+  margin: 7px 0;
+}
+
+
+h1 {
+  color: white;
+}
+
+header {
+  background-color: black;
+}
