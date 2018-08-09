@@ -3,56 +3,89 @@ import './App.css';
 import Menu from './components/Menu.js';
 import MapContainer from './components/MapContainer.js';
 
+var foursquare = require('react-foursquare')({
+  clientID: 'SNZTLCEBVGHWN1B0VB4J0GGCG5VE541QNOS54LHOXNX22H4Z',
+  clientSecret: '2MJMFYCW21VYCA5GKPQGYACKKI00HT3KQX0ALWIMXMS2LH43'
+});
+
 class App extends Component {
 
-    state = {
-      markers: [
-          {
-              lat: 51.519946,
-              long: -0.109537,
-              name: 'Prufrock Coffee'
-          },
-          {
-              lat: 51.509620,
-              long: -0.126939,
-              name: 'Notes',
-          },
-          {
-              lat: 51.511060,
-              long: -0.084289,
-              name: 'The New Black'
-          },
-          {
-              lat: 51.521918,
-              long: -0.119791,
-              name: 'Espresso Room'
-          },
-          {
-              lat: 51.513619,
-              long: -0.079086,
-              name: 'The Association'
-          },
-          {
-              lat: 51.519300,
-              long: -0.140725,
-              name: 'Attendant'
-          },
-          {
-              lat: 51.512371,
-              long: -0.127092,
-              name: 'Coffee Island'
-          }
-      ]
-    };
+  constructor(props) {
+      super(props);
+
+      this.state = {
+        items: [],
+        markers: [
+            {
+                lat: 51.519610,
+                long: -0.102451,
+                name: 'Fabric'
+            },
+            {
+                lat: 51.497464,
+                long: -0.044145,
+                name: 'Printworks',
+            },
+            {
+                lat: 51.497712,
+                long: -0.099491,
+                name: 'Ministry of Sound'
+            },
+            {
+                lat: 51.493556,
+                long: -0.098711,
+                name: 'Corsica Studios'
+            },
+            {
+                lat: 51.541721,
+                long: -0.125187,
+                name: 'Egg London'
+            },
+            {
+                lat: 51.464495,
+                long: -0.114498,
+                name: 'Phonox'
+            },
+            {
+                lat: 51.551698,
+                long: -0.074799,
+                name: 'The Nest'
+            },
+            {
+                lat: 51.525477,
+                long: -0.085594,
+                name: 'XOYO'
+            }
+        ],
+        virtualMarkers: []
+      };
+
+  }
+
+  componentDidMount() {
+    let params = {}
+    this.state.markers.map(marker => {params = {
+    ll: marker.lat+","+marker.long,
+    query: marker.name}
+  })
+  foursquare.venues.getVenues(params)
+    .then(res=> {
+      this.setState({ items: res.response.venues });
+    });
+}
 
   render() {
     return (
       <div className="App">
         <header>
-                  <Menu/>
+                  <Menu markers={this.state.markers}/>
                   <h1 id="title">London Clubs</h1>
         </header>
-        <MapContainer markers={this.state.markers}/>
+        <MapContainer
+          items={this.state.items}
+          markers={this.state.markers}
+          openInfo={this.openMarker}
+      />
       </div>
     );
   }

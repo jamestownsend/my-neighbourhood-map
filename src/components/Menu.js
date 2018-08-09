@@ -6,16 +6,33 @@ class Sidebar extends Component {
       super();
 
       this.state = {
+        markers: [],
+        query: ''
       };
   }
-
-
 
 
     open = () => {
         const sideBar = document.querySelector( ".menu-wrapper" );
 
         sideBar.style.display === 'none' ? sideBar.style.display = 'block' : sideBar.style.display = 'none';
+    }
+
+    search = (event) => {
+        const query = event.target.value.toLowerCase();
+        const {markers} = this.props
+        const newMarkers = [];
+
+        markers.forEach(function (marker) {
+            if (marker.title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+                marker.setVisible(true);
+                newMarkers.push(marker);
+            } else {
+                marker.setVisible(false);
+            }
+        });
+
+        this.setState({markers: newMarkers});
     }
 
     render() {
@@ -34,11 +51,10 @@ class Sidebar extends Component {
                            onChange={this.search}/>
                 </div>
                 <ul>
-                    {this.state.markers && this.state.markers.length && this.state.markers.map((marker, i) =>
+                    {this.props.markers && this.props.markers.length && this.props.markers.map((marker, i) =>
                         <li key={i}>
-                            <a href="#" onKeyPress={this.props.openInfo.bind(this, marker)}
-                               onClick={this.props.openInfo.bind(this, marker)}
-                            tabIndex="0" role="button">{marker.title}</a>
+                            <a href="#"
+                            tabIndex="0" role="button">{marker.name}</a>
                         </li>
                     )}
 

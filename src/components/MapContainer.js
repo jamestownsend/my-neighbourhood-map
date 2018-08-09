@@ -3,35 +3,73 @@ import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
 
 class MapContainer extends Component {
 
+  constructor() {
+      super();
+
+      this.state = {
+          markers: [],
+          showingInfoWindow: false
+      };
+  }
+
   componentDidMount() {
       this.forceUpdate()
     }
 
+  onMarkerClick = (props, marker, e) => {
+      this.setState({
+        selectedPlace: props,
+        activeMaker: marker,
+        showingInfoWindow: true
+      })
+    }
+
+    onMapClick = () => {
+      this.setState({
+        activeMaker: {},
+        selectedPlace: {},
+        showingInfoWindow: false
+      })
+    }
+    
   render() {
 
     return (
       <div className="map-container">
         <Map
           role="application"
+          onClick={this.onMapClick}
           google={this.props.google}
-          zoom={14}
+          zoom={12}
           initialCenter={{
             lat: 51.509865,
             lng: -0.118092
         }}>
-        {this.props.markers.map(marker =>{
+        {this.props.markers.map((marker, i) =>{
           return (
             <Marker
+              key={i}
               position={{ lat: marker.lat, lng: marker.long}}
-              onClick={this.onMarkerClick}
-              name={marker.name}/>
+              animation={this.props.google.maps.Animation.Fo}
+              title={marker.name}
+              onClick={this.onMarkerClick}/>
           )
         })}
-
-
-          <InfoWindow onClose={this.onInfoWindowClose}>
-
-          </InfoWindow>
+        <InfoWindow className="InfoWin" marker={this.state.activeMaker} visible={this.state.showingInfoWindow}>
+          <body>
+            <header>
+              <h2>{this.state.items}</h2>
+              <h3><span aria-labelledby="category">Category</span></h3>
+            </header>
+            <main>
+              <ul>
+                <li><span aria-labelledby="place-address">Address</span></li>
+                <li><span aria-labelledby="place-state">State</span></li>
+                <li><span aria-labelledby="place-coordinates">Coordinates</span></li>
+              </ul>
+            </main>
+          </body>
+        </InfoWindow>
         </Map>
       </div>
     );
