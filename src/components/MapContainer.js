@@ -8,12 +8,16 @@ class MapContainer extends Component {
 
       this.state = {
           markers: [],
-          showingInfoWindow: false
+          venues: [],
+          showingInfoWindow: false,
+          locations: []
       };
   }
 
   componentDidMount() {
       this.forceUpdate()
+      // this.setState({markers: this.props.markers})
+      this.setState({locations: this.props.locations});
     }
 
   onMarkerClick = (props, marker, e) => {
@@ -31,7 +35,7 @@ class MapContainer extends Component {
         showingInfoWindow: false
       })
     }
-    
+
   render() {
 
     return (
@@ -40,19 +44,20 @@ class MapContainer extends Component {
           role="application"
           onClick={this.onMapClick}
           google={this.props.google}
-          zoom={12}
+          zoom={14}
           initialCenter={{
             lat: 51.509865,
             lng: -0.118092
         }}>
-        {this.props.markers.map((marker, i) =>{
+        {this.props.locations.map((location, i) =>{
           return (
             <Marker
-              key={i}
-              position={{ lat: marker.lat, lng: marker.long}}
+              key={location.id}
+              position={{ lat: location.position.lat, lng: location.position.lng}}
               animation={this.props.google.maps.Animation.Fo}
-              title={marker.name}
-              onClick={this.onMarkerClick}/>
+              title={location.title}
+              onClick={this.onMarkerClick}
+            />
           )
         })}
         <InfoWindow className="InfoWin" marker={this.state.activeMaker} visible={this.state.showingInfoWindow}>

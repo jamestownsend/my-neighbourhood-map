@@ -1,90 +1,83 @@
 import React, { Component } from 'react';
 import './App.css';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
 import Menu from './components/Menu.js';
+import Credentials from './FSQCredentials'
 import MapContainer from './components/MapContainer.js';
+import 'whatwg-fetch';
 
-var foursquare = require('react-foursquare')({
-  clientID: 'SNZTLCEBVGHWN1B0VB4J0GGCG5VE541QNOS54LHOXNX22H4Z',
-  clientSecret: '2MJMFYCW21VYCA5GKPQGYACKKI00HT3KQX0ALWIMXMS2LH43'
-});
 
 class App extends Component {
 
   constructor(props) {
       super(props);
 
+
       this.state = {
-        items: [],
-        markers: [
-            {
-                lat: 51.519610,
-                long: -0.102451,
-                name: 'Fabric'
-            },
-            {
-                lat: 51.497464,
-                long: -0.044145,
-                name: 'Printworks',
-            },
-            {
-                lat: 51.497712,
-                long: -0.099491,
-                name: 'Ministry of Sound'
-            },
-            {
-                lat: 51.493556,
-                long: -0.098711,
-                name: 'Corsica Studios'
-            },
-            {
-                lat: 51.541721,
-                long: -0.125187,
-                name: 'Egg London'
-            },
-            {
-                lat: 51.464495,
-                long: -0.114498,
-                name: 'Phonox'
-            },
-            {
-                lat: 51.551698,
-                long: -0.074799,
-                name: 'The Nest'
-            },
-            {
-                lat: 51.525477,
-                long: -0.085594,
-                name: 'XOYO'
-            }
-        ],
-        virtualMarkers: []
+        info: '',
+        venues: [],
+        locations: [],
+        latlong: "",
+
       };
 
   }
 
   componentDidMount() {
-    let params = {}
-    this.state.markers.map(marker => {params = {
-    ll: marker.lat+","+marker.long,
-    query: marker.name}
+
+    this.getLocation();
+
+    const venuesEndpoint = 'https://api.foursquare.com/v2/venues/explore?';
+
+    const params = {
+      client_id: "SNZTLCEBVGHWN1B0VB4J0GGCG5VE541QNOS54LHOXNX22H4Z", //Client ID obtained by getting developer access
+      client_secret: "PXL0DTUC3OO4YBZ3VDLMJW4ODFAKTFVTGEOWM3CISX0FFHK5", //Client Secret obtained by getting developer access
+      limit: 20, //The max number of venues to load
+      query: 'Night Clubs', //The type of venues we want to query
+      v: '20130619', //The version of the API.
+      ll: '51.509865,-0.118092' //The latitude and longitude of Charing Cross, London
+    };
+
+    fetch(venuesEndpoint + new URLSearchParams(params), {
+      method: 'GET'
+    }).then(response => response.json()).then(response => {
+      const locations = response.response.groups[0].items.map(item => {
+      return {
+        position: { lat: item.venue.location.lat, lng: item.venue.location.lng },
+        title: item.venue.name,
+        id: item.venue.id,
+        category: item.venue.categories[0].name,
+        address: item.venue.location.address,
+        state: item.venue.location.state,
+        coordinates: item.venue.location.lat + ', ' + item.venue.location.lng,
+      }
+    })
+
+    this.setState({ locations })
   })
-  foursquare.venues.getVenues(params)
-    .then(res=> {
-      this.setState({ items: res.response.venues });
-    });
+  //If the api fails to load
+  .catch(err => {
+    console.log('Failed to fetch foursquare data', err)
+  })
 }
+
+getLocation = () => {
+  navigator.geolocation.getCurrentPosition(response => {
+    this.setState({
+      latlong: response.coords.latitude + "," + response.coords.longitude
+    });
+  });
+};
 
   render() {
     return (
       <div className="App">
         <header>
-                  <Menu markers={this.state.markers}/>
+                  <Menu locations={this.state.locations}/>
                   <h1 id="title">London Clubs</h1>
         </header>
         <MapContainer
-          items={this.state.items}
-          markers={this.state.markers}
-          openInfo={this.openMarker}
+          locations={this.state.locations}
       />
       </div>
     );

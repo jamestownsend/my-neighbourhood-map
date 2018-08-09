@@ -6,7 +6,7 @@ class Sidebar extends Component {
       super();
 
       this.state = {
-        markers: [],
+        locations: [],
         query: ''
       };
   }
@@ -51,10 +51,10 @@ class Sidebar extends Component {
                            onChange={this.search}/>
                 </div>
                 <ul>
-                    {this.props.markers && this.props.markers.length && this.props.markers.map((marker, i) =>
+                    {this.props.locations && this.props.locations.length && this.props.locations.map((location, i) =>
                         <li key={i}>
                             <a href="#"
-                            tabIndex="0" role="button">{marker.name}</a>
+                            tabIndex="0" role="button">{location.title}</a>
                         </li>
                     )}
 
