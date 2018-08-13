@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import escapeRegExp from 'escape-string-regexp'
+import sortBy from 'sort-by'
 
-class Sidebar extends Component {
+
+class Menu extends Component {
 
     constructor() {
       super();
@@ -11,31 +14,36 @@ class Sidebar extends Component {
       };
   }
 
+  open = () => {
+      const sideBar = document.querySelector( ".menu-wrapper" );
 
-    open = () => {
-        const sideBar = document.querySelector( ".menu-wrapper" );
+      sideBar.style.display === 'none' ? sideBar.style.display = 'block' : sideBar.style.display = 'none';
+  }
 
-        sideBar.style.display === 'none' ? sideBar.style.display = 'block' : sideBar.style.display = 'none';
-    }
+// Search feature adapted from udacity show contacts application.
 
-    search = (event) => {
-        const query = event.target.value.toLowerCase();
-        const {markers} = this.props
-        const newMarkers = [];
+  updateQuery = (query) => {
+    this.setState({ query: query.trim() })
+  }
 
-        markers.forEach(function (marker) {
-            if (marker.title.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                marker.setVisible(true);
-                newMarkers.push(marker);
-            } else {
-                marker.setVisible(false);
-            }
-        });
-
-        this.setState({markers: newMarkers});
-    }
+  clearQuery = () => {
+    this.setState({ query: '' })
+  }
 
     render() {
+      const { locations } = this.props
+      const { query } = this.state
+
+      let showingLocations
+      if (query) {
+        const match = new RegExp(escapeRegExp(query), 'i')
+        showingLocations = locations.filter((location) => match.test(location.title))
+      } else {
+        showingLocations = locations
+      }
+
+      showingLocations.sort(sortBy('title'))
+
       return (
         <div>
             <div className="hamburger" onClick={this.open}>
@@ -48,10 +56,11 @@ class Sidebar extends Component {
                     <input type="text"
                            aria-labelledby="filter" placeholder="Search..."
                            className="input" role="search"
-                           onChange={this.search}/>
+                           value={query}
+                           onChange={(event) => this.updateQuery(event.target.value)}/>
                 </div>
                 <ul>
-                    {this.props.locations && this.props.locations.length && this.props.locations.map((location, i) =>
+                    {showingLocations && showingLocations.length && showingLocations.map((location, i) =>
                         <li key={i}>
                             <a href="#"
                             tabIndex="0" role="button">{location.title}</a>
@@ -65,4 +74,4 @@ class Sidebar extends Component {
     }
   }
 
-export default Sidebar;
+export default Menu;

@@ -16,7 +16,6 @@ class MapContainer extends Component {
 
   componentDidMount() {
       this.forceUpdate()
-      // this.setState({markers: this.props.markers})
       this.setState({locations: this.props.locations});
     }
 
