@@ -7,17 +7,15 @@ class MapContainer extends Component {
       super();
 
       this.state = {
-          markers: [],
-          venues: [],
           showingInfoWindow: false,
-          locations: []
+          activeMarker: {},
+          selectedPlace: {},
       };
   }
 
   componentDidMount() {
       this.forceUpdate()
-      this.setState({locations: this.props.locations});
-    }
+}
 
   onMarkerClick = (props, marker, e) => {
       this.setState({

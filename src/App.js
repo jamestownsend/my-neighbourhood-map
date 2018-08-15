@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
 import Menu from './components/Menu.js';
 import Credentials from './FSQCredentials'
 import MapContainer from './components/MapContainer.js';
@@ -15,9 +14,9 @@ class App extends Component {
 
       this.state = {
         info: '',
-        venues: [],
-        locations: [],
+        locations: {},
         latlong: "",
+
 
       };
 
@@ -61,6 +60,7 @@ class App extends Component {
   })
 }
 
+
 getLocation = () => {
   navigator.geolocation.getCurrentPosition(response => {
     this.setState({
@@ -76,9 +76,6 @@ getLocation = () => {
                   <Menu locations={this.state.locations}/>
                   <h1 id="title">London Clubs</h1>
         </header>
-        <MapContainer
-          locations={this.state.locations}
-      />
       </div>
     );
   }
