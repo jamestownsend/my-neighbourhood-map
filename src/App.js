@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
-import Menu from './components/Menu.js';
+import MenuButton from './components/MenuButton.js';
 import Credentials from './FSQCredentials'
-import MapContainer from './components/MapContainer.js';
+import MapMenuContainer from './components/MapMenuContainer.js';
 import 'whatwg-fetch';
-
 
 class App extends Component {
 
   constructor(props) {
       super(props);
 
-
       this.state = {
         info: '',
         locations: {},
         latlong: "",
-
-
       };
-
   }
 
   componentDidMount() {
@@ -61,21 +56,22 @@ class App extends Component {
 }
 
 
-getLocation = () => {
-  navigator.geolocation.getCurrentPosition(response => {
-    this.setState({
-      latlong: response.coords.latitude + "," + response.coords.longitude
+  getLocation = () => {
+    navigator.geolocation.getCurrentPosition(response => {
+      this.setState({
+        latlong: response.coords.latitude + "," + response.coords.longitude
+      });
     });
-  });
-};
+  };
 
   render() {
     return (
       <div className="App">
         <header>
-                  <Menu locations={this.state.locations}/>
                   <h1 id="title">London Clubs</h1>
+                  <MenuButton/>
         </header>
+                  <MapMenuContainer locations={this.state.locations}/>
       </div>
     );
   }

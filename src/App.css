@@ -7,6 +7,11 @@
   color: #000;
 }
 
+.infoWindow {
+  background-color: white;
+  color: white;
+}
+
 * {
   box-sizing: inherit;
   font-size: 10px;
@@ -116,7 +121,11 @@ h1 {
 }
 
 h2 {
-  color: black;
+  color: white;
+}
+
+span {
+  color:white;
 }
 
 
