@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
-import MenuButton from './components/MenuButton.js';
+import Menu from './components/Menu.js';
 import Credentials from './FSQCredentials'
-import MapMenuContainer from './components/MapMenuContainer.js';
+import MapContainer from './components/MapContainer.js';
 import 'whatwg-fetch';
+
 
 class App extends Component {
 
   constructor(props) {
       super(props);
 
+
       this.state = {
         info: '',
         locations: {},
         latlong: "",
+
+
       };
+
   }
 
   componentDidMount() {
@@ -29,7 +34,7 @@ class App extends Component {
       limit: 20, //The max number of venues to load
       query: 'Night Clubs', //The type of venues we want to query
       v: '20130619', //The version of the API.
-      ll: '51.509865,-0.118092' //The latitude and longitude of Charing Cross, London
+      ll: '51.519610,-0.102451' //The latitude and longitude of Charing Cross, London
     };
 
     fetch(venuesEndpoint + new URLSearchParams(params), {
@@ -56,22 +61,21 @@ class App extends Component {
 }
 
 
-  getLocation = () => {
-    navigator.geolocation.getCurrentPosition(response => {
-      this.setState({
-        latlong: response.coords.latitude + "," + response.coords.longitude
-      });
+getLocation = () => {
+  navigator.geolocation.getCurrentPosition(response => {
+    this.setState({
+      latlong: response.coords.latitude + "," + response.coords.longitude
     });
-  };
+  });
+};
 
   render() {
     return (
       <div className="App">
         <header>
+          <MapContainer locations={this.state.locations}/>
                   <h1 id="title">London Clubs</h1>
-                  <MenuButton/>
         </header>
-                  <MapMenuContainer locations={this.state.locations}/>
       </div>
     );
   }

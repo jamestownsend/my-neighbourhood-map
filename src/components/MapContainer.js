@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
-import PropTypes from 'prop-types'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
+import MenuButton from './MenuButton.js';
 
-class MapMenuContainer extends Component {
+class MapContainer extends Component {
 
   constructor() {
     super();
@@ -14,7 +14,6 @@ class MapMenuContainer extends Component {
           activeMarker: {},
           selectedPlace: {},
           loctations: [],
-          visibleLocations: []
       };
     }
 
@@ -34,46 +33,33 @@ class MapMenuContainer extends Component {
     })
   }
 
-  // Search feature adapted from udacity show contacts application.
-
   updateQuery = (query) => {
       this.setState({ query: query.trim() })
-      this.search(query)
     }
 
-  search = (query) => {
-    const { locations } = this.props;
-
-    let showingLocations = [];
-    if (query) {
-      const match = new RegExp(escapeRegExp(query), 'i')
-      showingLocations = locations.filter((location) => match.test(location.title))
-    } else {
-      showingLocations = locations
-    }
-      showingLocations.sort(sortBy('title'))
-      this.setState({visibleLocations: showingLocations});
-    };
 
   render() {
-    const { query, visibleLocations } = this.state
-    const {locations} = this.props
-
+    const { query } = this.state
+    const { locations } = this.props
+  // Search feature adapted from udacity show contacts application.
     let displayLocations
-    if (visibleLocations.length > 0) {
-      displayLocations = visibleLocations
+    if (query) {
+      const match = new RegExp(escapeRegExp(query), 'i')
+      displayLocations = locations.filter((location) => match.test(location.title))
     } else {
       displayLocations = locations
     }
 
     return (
       <div>
+        <div>
+          <MenuButton/>
+        </div>
           <div className="menu-wrapper">
               <div className="form" role="form">
                   <input type="text"
                          aria-labelledby="filter" placeholder="Search..."
                          className="input" role="search"
-                         value={query}
                          onChange={(event) => this.updateQuery(event.target.value)}/>
               </div>
               <ul>
@@ -96,8 +82,8 @@ class MapMenuContainer extends Component {
           google={this.props.google}
           zoom={14}
           initialCenter={{
-            lat: 51.509865,
-            lng: -0.118092
+            lat: 51.519610,
+            lng: -0.102451
         }}>
         {displayLocations && displayLocations.length && displayLocations.map((location, i) =>{
           return (
@@ -106,9 +92,8 @@ class MapMenuContainer extends Component {
               position={{ lat: location.position.lat, lng: location.position.lng}}
               animation={this.props.google.maps.Animation.Fo}
               title={location.title}
-              category={location.category}
-              address={location.address}
               onClick={this.onMarkerClick}
+              address={location.address}
             />
           )
         })}
@@ -119,7 +104,7 @@ class MapMenuContainer extends Component {
             </header>
             <main>
               <ul>
-                <li><span aria-labelledby="place-address">Address</span>: <span id="place-address">{!this.state.selectedPlace.address ? 'N/A' : this.state.selectedPlace.address}</span></li>
+                <li><span aria-labelledby="place-address">Address:  </span><span id="place-address">{!this.state.selectedPlace.address ? 'N/A' : this.state.selectedPlace.address}</span></li>
               </ul>
             </main>
           </body>
@@ -131,7 +116,6 @@ class MapMenuContainer extends Component {
   }
 }
 
-
 export default GoogleApiWrapper({
   apiKey: ("AIzaSyCCot3DxWsR9HvFRpAHcr4VRs93InlV6gQ")
-})(MapMenuContainer)
+})(MapContainer)
