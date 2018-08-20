@@ -112,6 +112,21 @@ header {
   overflow-x: hidden;
 }
 
+.no-results-hide {
+  color:#595959;
+}
+
+.no-results {
+  display: flex;
+  -webkit-display: flex;
+  justify-content: center;
+  width: 100%;
+  font-size:1.5em;
+  padding: 10px;
+  font-style: italic;
+}
+
+
 .hamburger {
   width: 80px;
   height: 80px;

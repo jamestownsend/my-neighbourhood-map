@@ -62,7 +62,9 @@ state = {
                          className="input" role="search"
                          onChange={(event) => this.props.onSearch(event.target.value)}/>
               </div>
-              <ul>
+              <ul className="no-results-hide">
+                {displayLocations.length == 0 &&
+                  <span className="no-results">No Results</span>}
                   {displayLocations && displayLocations.length && displayLocations.map((location, i) =>
                       <li key={i}>
                           <a href="title-list-item#"
