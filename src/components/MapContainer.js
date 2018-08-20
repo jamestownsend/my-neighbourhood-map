@@ -3,19 +3,22 @@ import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 import MenuButton from './MenuButton.js';
+import PropTypes from 'prop-types'
 
 class MapContainer extends Component {
+  static propTypes = {
+    onSearch: PropTypes.func.isRequired,
+    onItemClick: PropTypes.func.isRequired,
+    locations: PropTypes.array.isRequired,
+    query: PropTypes.string.isRequired
+}
 
-  constructor() {
-    super();
-
-      this.state = {
-          showingInfoWindow: false,
-          activeMarker: {},
-          selectedPlace: {},
-          loctations: [],
-      };
-    }
+state = {
+    showingInfoWindow: false,
+    activeMarker: {},
+    selectedPlace: {},
+    loctations: [],
+};
 
   onMarkerClick = (props, marker, e) => {
     this.setState({
@@ -33,13 +36,8 @@ class MapContainer extends Component {
     })
   }
 
-  updateQuery = (query) => {
-      this.setState({ query: query.trim() })
-    }
-
-
   render() {
-    const { query } = this.state
+    const { query } = this.props
     const { locations } = this.props
   // Search feature adapted from udacity show contacts application.
     let displayLocations
@@ -49,6 +47,8 @@ class MapContainer extends Component {
     } else {
       displayLocations = locations
     }
+
+    displayLocations.sort(sortBy('title'))
 
     return (
       <div>
@@ -60,16 +60,18 @@ class MapContainer extends Component {
                   <input type="text"
                          aria-labelledby="filter" placeholder="Search..."
                          className="input" role="search"
-                         onChange={(event) => this.updateQuery(event.target.value)}/>
+                         onChange={(event) => this.props.onSearch(event.target.value)}/>
               </div>
               <ul>
                   {displayLocations && displayLocations.length && displayLocations.map((location, i) =>
                       <li key={i}>
-                          <a href="#"
-                          onClick={this.onMarkerClick}
+                          <a href="title-list-item#"
+                          onClick={this.props.onItemClick}
                           key={location.id}
+                          value={this.props.selectedLocation}
                           position={{ lat: location.position.lat, lng: location.position.lng}}
                           title={location.title}
+                          aria-labelledby="location-name"
                           tabIndex="0" role="button">{location.title}</a>
                       </li>
                   )}
@@ -98,13 +100,14 @@ class MapContainer extends Component {
           )
         })}
         <InfoWindow className="InfoWin" marker={this.state.activeMaker} visible={this.state.showingInfoWindow}>
-          <body>
-            <header>
-              <h2>{this.state.selectedPlace.title}</h2>
+          <body className="InfoWin-body">
+            <header className="InfoWin-header">
+              <h2 className="InfoWin-header">{this.state.selectedPlace.title}</h2>
             </header>
             <main>
-              <ul>
-                <li><span aria-labelledby="place-address">Address:  </span><span id="place-address">{!this.state.selectedPlace.address ? 'N/A' : this.state.selectedPlace.address}</span></li>
+              <h2 className="InfoWin-address">Address</h2>
+              <ul className="InfoWin-list">
+                <li className="InfoWin-list"><span aria-labelledby="place-address" className="InfoWin-list" id="place-address">{!this.state.selectedPlace.address ? 'N/A' : (this.state.selectedPlace.address)}</span></li>
               </ul>
             </main>
           </body>
