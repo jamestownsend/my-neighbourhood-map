@@ -66,6 +66,12 @@ header {
   background-color: black;
 }
 
+.Disclaimer-info {
+  background-color: white;
+  font-style: italic;
+
+}
+
 .map-container {
   width: 100%;
   height: 89vh;

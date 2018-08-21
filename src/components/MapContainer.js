@@ -36,6 +36,11 @@ state = {
     })
   }
 
+gm_authFailure = () => {
+    alert("Google maps failed to load")
+  }
+
+
   render() {
     const { query } = this.props
     const { locations } = this.props
@@ -47,7 +52,6 @@ state = {
     } else {
       displayLocations = locations
     }
-
     displayLocations.sort(sortBy('title'))
 
     return (
@@ -63,7 +67,7 @@ state = {
                          onChange={(event) => this.props.onSearch(event.target.value)}/>
               </div>
               <ul className="no-results-hide">
-                {displayLocations.length == 0 &&
+                {displayLocations.length === 0 &&
                   <span className="no-results">No Results</span>}
                   {displayLocations && displayLocations.length && displayLocations.map((location, i) =>
                       <li key={i}>
@@ -85,6 +89,7 @@ state = {
           onClick={this.onMapClick}
           google={this.props.google}
           zoom={14}
+          onError={this.gm_authFailure}
           initialCenter={{
             lat: 51.519610,
             lng: -0.102451
@@ -94,7 +99,7 @@ state = {
             <Marker
               key={location.id}
               position={{ lat: location.position.lat, lng: location.position.lng}}
-              animation={this.props.google.maps.Animation.Fo}
+              animation={this.props.google.maps.Animation.DROP}
               title={location.title}
               onClick={this.onMarkerClick}
               address={location.address}
@@ -110,6 +115,7 @@ state = {
               <h2 className="InfoWin-address">Address</h2>
               <ul className="InfoWin-list">
                 <li className="InfoWin-list"><span aria-labelledby="place-address" className="InfoWin-list" id="place-address">{!this.state.selectedPlace.address ? 'N/A' : (this.state.selectedPlace.address)}</span></li>
+                <li className = "Disclaimer-info"> All data sourced from FourSquare API </li>
               </ul>
             </main>
           </body>

@@ -16,6 +16,8 @@ class MenuButton extends Component {
                 <div className="hamburgerline"></div>
                 <div className="hamburgerline"></div>
             </div>
+          <div>
+          </div>
         </div>
       );
     }

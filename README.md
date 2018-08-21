@@ -3,6 +3,8 @@ This is my final project for the Udacity Front End Web Development Nano Degree.
 
 This app uses Google Maps API to generate the map environment and FourSquare API to pull location data.
 
+By default the create-react-app includes a service worker to enable offline use.
+
 
 ## How to use
 
@@ -29,6 +31,11 @@ https://github.com/jamestownsend/my-neighbourhood-map
 
 
 A new browser window will load display the app or navigate to http://localhost:3000/ in your browser to open the page.
+
+## Production Build
+
+To run a production build use: “npm run build” which will create a production build of the app in /build.
+
 
 ## Future additions
 

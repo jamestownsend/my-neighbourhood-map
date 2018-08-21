@@ -90,6 +90,10 @@ menuClick = e => {
         query: e.trim()})
     }
 
+  gm_authFailure = () => {
+        alert("Google maps failed to load")
+      }
+
   render() {
     return (
       <div className="App">
@@ -107,6 +111,7 @@ menuClick = e => {
           closeModal={this.infoClose}
           />
       </div>
+
     );
   }
 }
