@@ -90,9 +90,6 @@ menuClick = e => {
         query: e.trim()})
     }
 
-  gm_authFailure = () => {
-        alert("Google maps failed to load")
-      }
 
   render() {
     return (

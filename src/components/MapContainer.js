@@ -5,6 +5,12 @@ import sortBy from 'sort-by'
 import MenuButton from './MenuButton.js';
 import PropTypes from 'prop-types'
 
+window.gm_authFailure = () => {
+    alert("Ooooops! Google maps failed to load.")
+    console.log("Ooooops! Google maps failed to load.")
+  }
+
+
 class MapContainer extends Component {
   static propTypes = {
     onSearch: PropTypes.func.isRequired,
@@ -36,10 +42,6 @@ state = {
     })
   }
 
-gm_authFailure = () => {
-    alert("Google maps failed to load")
-  }
-
 
   render() {
     const { query } = this.props
@@ -60,9 +62,9 @@ gm_authFailure = () => {
           <MenuButton/>
         </div>
           <div className="menu-wrapper">
-              <div className="form" role="form">
+              <div className="form" role="form" aria-labelledby="filter">
                   <input type="text"
-                         aria-labelledby="filter" placeholder="Search..."
+                        placeholder="Search..."
                          className="input" role="search"
                          onChange={(event) => this.props.onSearch(event.target.value)}/>
               </div>
@@ -71,7 +73,7 @@ gm_authFailure = () => {
                   <span className="no-results">No Results</span>}
                   {displayLocations && displayLocations.length && displayLocations.map((location, i) =>
                       <li key={i}>
-                          <a href="title-list-item#"
+                          <a href="#"
                           onClick={this.props.onItemClick}
                           key={location.id}
                           value={this.props.selectedLocation}
@@ -109,7 +111,7 @@ gm_authFailure = () => {
         <InfoWindow className="InfoWin" marker={this.state.activeMaker} visible={this.state.showingInfoWindow}>
           <body className="InfoWin-body">
             <header className="InfoWin-header">
-              <h2 className="InfoWin-header">{this.state.selectedPlace.title}</h2>
+              <h2 className="InfoWin-header" tabIndex="0" role="infoWindow">{this.state.selectedPlace.title}</h2>
             </header>
             <main>
               <h2 className="InfoWin-address">Address</h2>
