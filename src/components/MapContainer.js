@@ -27,19 +27,12 @@ state = {
 };
 
   onMarkerClick = (props, marker, e) => {
-    this.setState({
-      selectedPlace: props,
-      activeMaker: marker,
-      showingInfoWindow: true
-    })
+    this.props.onMarkerClickInfo(props)
   }
 
-  onMapClick = () => {
-    this.setState({
-      activeMaker: {},
-      selectedPlace: {},
-      showingInfoWindow: false
-    })
+  openMenu = () => {
+        const menu = document.querySelector( ".menu-wrapper" );
+        menu.style.display === 'none' ? menu.style.display = 'block' : menu.style.display = 'none';
   }
 
 
@@ -59,7 +52,7 @@ state = {
     return (
       <div>
         <div>
-          <MenuButton/>
+          <MenuButton open={this.openMenu}/>
         </div>
           <div className="menu-wrapper">
               <div className="form" role="form" aria-labelledby="filter">
@@ -70,7 +63,7 @@ state = {
               </div>
               <ul className="no-results-hide">
                 {displayLocations.length === 0 &&
-                  <span className="no-results">No Results</span>}
+                  <span id="title" className="no-results">No Results</span>}
                   {displayLocations && displayLocations.length && displayLocations.map((location, i) =>
                       <li key={i}>
                           <a href="#"
@@ -79,7 +72,7 @@ state = {
                           value={this.props.selectedLocation}
                           position={{ lat: location.position.lat, lng: location.position.lng}}
                           title={location.title}
-                          aria-labelledby="location-name"
+                          aria-labelledby="location title"
                           tabIndex="0" role="button">{location.title}</a>
                       </li>
                   )}
@@ -88,10 +81,9 @@ state = {
       <div className="map-container">
         <Map
           role="application"
-          onClick={this.onMapClick}
+          onClick={this.props.closeModal}
           google={this.props.google}
           zoom={14}
-          onError={this.gm_authFailure}
           initialCenter={{
             lat: 51.519610,
             lng: -0.102451
@@ -108,20 +100,6 @@ state = {
             />
           )
         })}
-        <InfoWindow className="InfoWin" marker={this.state.activeMaker} visible={this.state.showingInfoWindow}>
-          <body className="InfoWin-body">
-            <header className="InfoWin-header">
-              <h2 className="InfoWin-header" tabIndex="0" aria-labelledby = "info-window" role="Listbox">{this.state.selectedPlace.title}</h2>
-            </header>
-            <main>
-              <h2 className="InfoWin-address">Address</h2>
-              <ul className="InfoWin-list">
-                <li className="InfoWin-list"><span aria-labelledby="place-address" className="InfoWin-list" id="place-address">{!this.state.selectedPlace.address ? 'N/A' : (this.state.selectedPlace.address)}</span></li>
-                <li className = "Disclaimer-info"> All data sourced from FourSquare API </li>
-              </ul>
-            </main>
-          </body>
-        </InfoWindow>
         </Map>
       </div>
     </div>

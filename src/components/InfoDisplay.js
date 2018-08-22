@@ -5,9 +5,10 @@ function InfoDisplay(props) {
 
   const data = props.venueInfo
   return (
-    <div className="details-modal">
+    <div className="details-modal" tabIndex="0">
       <button
         onClick={props.closeModal}
+        onKeyPress={props.closeModal}
         className="close-modal"
         aria-label="Close details window">X</button>
       <h2 className="info-title"><span aria-labelledby="place-title"></span>{data.title}</h2>
@@ -22,7 +23,7 @@ function InfoDisplay(props) {
 }
 
 InfoDisplay.propTypes = {
-  venueInfo: PropTypes.array.isRequired,
+  venueInfo: PropTypes.object.isRequired,
   closeModal: PropTypes.func.isRequired
 }
 

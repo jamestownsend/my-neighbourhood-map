@@ -8,7 +8,7 @@ class App extends Component {
 
 state = {
         locations: [],
-        venueInfo: [],
+        venueInfo: {},
         query: "",
         latlong: ""
       }
@@ -50,45 +50,62 @@ state = {
   })
 }
 
-getLocation = () => {
-  navigator.geolocation.getCurrentPosition(response => {
-    this.setState({
-      latlong: response.coords.latitude + "," + response.coords.longitude
+  getLocation = () => {
+    navigator.geolocation.getCurrentPosition(response => {
+      this.setState({
+        latlong: response.coords.latitude + "," + response.coords.longitude
+      });
     });
-  });
-};
+  };
 
-menuClick = e => {
-  this.setState({
-    query: e.target.textContent.replace(/- /g, '')
-  })
+  menuClick = e => {
+    this.setState({
+      query: e.target.textContent.replace(/- /g, '')
+    })
 
-  const modal = document.querySelector('.details-modal')
-
-  for (const location of this.state.locations) {
-    if (location.title === e.target.textContent.replace(/- /g, '')) {
-      this.setState({ venueInfo: location })
-      modal.style.display = 'block'
-      modal.style.opacity = '0.95'
-      }
-    }
-  }
-
-  infoClose = e => {
     const modal = document.querySelector('.details-modal')
 
-    modal.style.opacity = '0'
-    setTimeout(() => {
-      modal.style.display = 'none'
-    }, 500)
-    this.setState({
-      query: ""})
-  }
+    for (const location of this.state.locations) {
+      if (location.title === e.target.textContent.replace(/- /g, '')) {
+        this.setState({ venueInfo: location })
+        modal.style.display = 'block'
+        modal.style.opacity = '0.95'
+        }
+      }
+    }
+
+  markerClick = (props) => {
+      this.setState({
+        query: props.title.replace(/- /g, '')
+      })
+
+      const modal = document.querySelector('.details-modal')
+
+      for (const location of this.state.locations) {
+        if (location.title === props.title.replace(/- /g, '')) {
+          this.setState({ venueInfo: location })
+          modal.style.display = 'block'
+          modal.style.opacity = '0.95'
+          }
+        }
+      }
+
+
+  infoClose = e => {
+      const modal = document.querySelector('.details-modal')
+
+      modal.style.opacity = '0'
+      setTimeout(() => {
+        modal.style.display = 'none'
+      }, 500)
+      this.setState({
+        query: ""})
+    }
 
   updateQuery = e => {
-      this.setState({
-        query: e.trim()})
-    }
+        this.setState({
+          query: e.trim()})
+      }
 
 
   render() {
@@ -97,6 +114,8 @@ menuClick = e => {
         <header>
           <MapContainer locations={this.state.locations}
           onItemClick={this.menuClick}
+          closeModal={this.infoClose}
+          onMarkerClickInfo={this.markerClick}
           onSearch={this.updateQuery}
           query={this.state.query}
           selectedLocation={this.state.locationDisplayed}

@@ -132,6 +132,9 @@ header {
   font-style: italic;
 }
 
+.hamburger:hover {
+  cursor: pointer;
+}
 
 .hamburger {
   width: 80px;
@@ -139,7 +142,6 @@ header {
   float: left;
   color: black;
   padding-top: 1.5rem;
-
 }
 
 .hamburgerline {
