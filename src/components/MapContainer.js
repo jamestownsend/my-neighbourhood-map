@@ -111,7 +111,7 @@ state = {
         <InfoWindow className="InfoWin" marker={this.state.activeMaker} visible={this.state.showingInfoWindow}>
           <body className="InfoWin-body">
             <header className="InfoWin-header">
-              <h2 className="InfoWin-header" tabIndex="0" role="infoWindow">{this.state.selectedPlace.title}</h2>
+              <h2 className="InfoWin-header" tabIndex="0" aria-labelledby = "info-window" role="Listbox">{this.state.selectedPlace.title}</h2>
             </header>
             <main>
               <h2 className="InfoWin-address">Address</h2>

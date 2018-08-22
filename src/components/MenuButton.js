@@ -11,7 +11,7 @@ class MenuButton extends Component {
 
       return (
         <div>
-            <div className="hamburger" tabIndex="0" role="menu-button" onClick={this.open}>
+            <div className="hamburger" tabIndex="0" role="button" onClick={this.open}>
                 <div className="hamburgerline"></div>
                 <div className="hamburgerline"></div>
                 <div className="hamburgerline"></div>
